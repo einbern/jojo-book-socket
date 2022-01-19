@@ -2,7 +2,8 @@ const PORT = process.env.PORT || 8900
 const io = require("socket.io")(PORT, {
     cors: {
       // origin: "http://localhost:3000",
-      origin: "https://jojobook.netlify.app/"
+      origin: "*",
+      // origin: "https://jojobook.netlify.app/"
     },
   });
   
@@ -27,7 +28,6 @@ const io = require("socket.io")(PORT, {
   
     //take userId and socketId from user
     socket.on("addUser", (userId) => {
-       console.log(userId)
       addUser(userId, socket.id);
       io.emit("getUsers", users);
     });
@@ -35,7 +35,6 @@ const io = require("socket.io")(PORT, {
     //send and get message
     socket.on("sendMessage", ({ senderId, receiverId, text }) => {
       const user = getUser(receiverId);
-      console.log('user : ' + user)
       io.to(user.socketId).emit("getMessage", {
         senderId,
         text,
